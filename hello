@@ -8,3 +8,6 @@ std::cout << "teste2" << std::endl;
 }
 // edit via VS Code
 //teste
+// commit via VS Code (auto save on)
+//mudança forçada 
+//teste
