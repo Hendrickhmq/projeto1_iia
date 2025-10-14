@@ -1,6 +1,9 @@
 #include <iostream>
 int main () {
 std::cout << "hello" << std::endl;
+
 std::cout << "teste" << std::endl;
+std::cout << "teste2" << std::endl;
     return 0;
-}ok 2025-10-14 13:17:27
+}
+// edit via VS Code
