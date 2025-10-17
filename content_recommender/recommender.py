@@ -57,7 +57,7 @@ class ContentRecommender:
                 "Products dataset is missing required columns: "
                 + ", ".join(sorted(missing_columns))
             )
-
+            
         if self._products[self._REQUIRED_COLUMNS].isnull().any().any():
             raise ValueError("Products dataset contains empty values in required columns.")
 
@@ -159,3 +159,4 @@ class ContentRecommender:
 def load_default_recommender() -> ContentRecommender:
     data_dir = Path(__file__).resolve().parent / "data"
     return ContentRecommender(data_dir / "products.csv")
+
