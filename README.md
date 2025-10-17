@@ -57,12 +57,6 @@ requirements.txt            # Dependências necessárias (pandas, scikit-learn)
 
 - `content_recommender/data/products.csv`: catálogo pronto com 31 séries e três atributos cada.
 - `content_recommender/data/user_ratings.csv`: 500 interações simuladas (escala 1-5) para referência em estudos futuros.
-
-## Validação do catálogo
-
-- O carregamento do `products.csv` verifica colunas obrigatórias, valores ausentes e IDs duplicados.
-- Caso o arquivo seja editado incorretamente, a CLI informa o problema para facilitar o ajuste manual.
-
 ## Solução de problemas comuns
 
 - **`ModuleNotFoundError: No module named 'pandas'`**
@@ -76,8 +70,4 @@ requirements.txt            # Dependências necessárias (pandas, scikit-learn)
 
 - Criar testes automatizados para o fluxo principal de recomendação.
 - Expor o motor como API web (Flask/FastAPI) para integração com front-end.
-- Experimentar modelos híbridos que combinem conteúdo e notas dos usuários.
-
-## Licença
-
-Distribuído sob a licença MIT. Consulte o arquivo `LICENSE` (caso aplicável) ou defina a licença desejada para o projeto.
+- Experimentar modelos híbridos que combinem conteúdo e notas dos usuár
