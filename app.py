@@ -66,7 +66,11 @@ def main() -> None:
     name = input("\nPara começar, informe seu nome: ").strip() or "Visitante"
 
     data_path = Path(__file__).resolve().parent / "content_recommender" / "data" / "products.csv"
-    recommender = ContentRecommender(data_path)
+    try:
+        recommender = ContentRecommender(data_path)
+    except (FileNotFoundError, ValueError) as error:
+        print(f"\nNão foi possível carregar o catálogo de séries: {error}")
+        return
 
     print(
         f"\nOlá, {name}! Vamos montar seu perfil de preferências. "
