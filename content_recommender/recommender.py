@@ -12,16 +12,16 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 @dataclass
 class Recommendation:
-    """Representation of a product recommendation."""
+    """Representation of a series recommendation."""
 
-    product_id: int
+    series_id: int
     name: str
     score: float
     metadata: Dict[str, str]
 
     def to_dict(self) -> Dict[str, object]:
         return {
-            "product_id": self.product_id,
+            "series_id": self.series_id,
             "name": self.name,
             "score": round(float(self.score), 4),
             **self.metadata,
@@ -29,23 +29,59 @@ class Recommendation:
 
 
 class ContentRecommender:
-    """Content-based recommendation engine for marketplace products."""
+    """Content-based recommendation engine for TV series."""
+
+    _REQUIRED_COLUMNS = ("series_id", "name", "genre", "narrative_format", "style")
 
     def __init__(self, products_path: Path | str) -> None:
         self.products_path = Path(products_path)
         if not self.products_path.exists():
             raise FileNotFoundError(f"Products file not found: {self.products_path}")
 
-        self._products = pd.read_csv(self.products_path)
+        self._products = pd.read_csv(self.products_path, encoding="utf-8")
+        self._validate_dataset()
+        self._products = self._products[list(self._REQUIRED_COLUMNS)].copy()
+        self._products["series_id"] = self._products["series_id"].astype(int)
+
         self._vectorizer = TfidfVectorizer()
-        self._feature_matrix = self._vectorizer.fit_transform(self._combine_features(self._products))
+        self._feature_matrix = self._vectorizer.fit_transform(
+            self._combine_features(self._products)
+        )
+
+    def _validate_dataset(self) -> None:
+        missing_columns = [
+            column for column in self._REQUIRED_COLUMNS if column not in self._products.columns
+        ]
+        if missing_columns:
+            raise ValueError(
+                "Products dataset is missing required columns: "
+                + ", ".join(sorted(missing_columns))
+            )
+
+        if self._products[self._REQUIRED_COLUMNS].isnull().any().any():
+            raise ValueError("Products dataset contains empty values in required columns.")
+
+        duplicated_ids = self._products["series_id"].duplicated()
+        if duplicated_ids.any():
+            duplicates = self._products.loc[duplicated_ids, "series_id"].tolist()
+            raise ValueError(
+                "Products dataset contains duplicated series_id values: "
+                + ", ".join(map(str, duplicates))
+            )
+
+    @staticmethod
+    def _normalize_token(value: str) -> str:
+        cleaned = str(value).replace("-", " ").replace("_", " ")
+        return " ".join(cleaned.split())
 
     @staticmethod
     def _combine_features(products: pd.DataFrame) -> Iterable[str]:
         return (
             (
-                f"{row.category} {row.flavor} {row.benefit} "
-                f"{row.name.replace('-', ' ')}"
+                f"{ContentRecommender._normalize_token(row.genre)} "
+                f"{ContentRecommender._normalize_token(row.narrative_format)} "
+                f"{ContentRecommender._normalize_token(row.style)} "
+                f"{ContentRecommender._normalize_token(row.name)}"
             ).lower()
             for row in products.itertuples()
         )
@@ -58,9 +94,11 @@ class ContentRecommender:
         """Return dictionaries of possible values for each feature."""
 
         return {
-            "category": sorted(self._products["category"].unique().tolist()),
-            "flavor": sorted(self._products["flavor"].unique().tolist()),
-            "benefit": sorted(self._products["benefit"].unique().tolist()),
+            "genre": sorted(self._products["genre"].unique().tolist()),
+            "narrative_format": sorted(
+                self._products["narrative_format"].unique().tolist()
+            ),
+            "style": sorted(self._products["style"].unique().tolist()),
         }
 
     def build_profile(self, preferences: Dict[str, str]) -> str:
@@ -73,7 +111,7 @@ class ContentRecommender:
                 continue
             if key in options and value not in options[key]:
                 raise ValueError(f"'{value}' is not a valid option for '{key}'.")
-            profile_tokens.append(str(value))
+            profile_tokens.append(self._normalize_token(str(value)))
         return " ".join(token.lower() for token in profile_tokens if token)
 
     def recommend(
@@ -99,13 +137,13 @@ class ContentRecommender:
 
         recommendations = [
             Recommendation(
-                product_id=int(row.product_id),
+                series_id=int(row.series_id),
                 name=str(row.name),
                 score=float(row.score),
                 metadata={
-                    "category": str(row.category),
-                    "flavor": str(row.flavor),
-                    "benefit": str(row.benefit),
+                    "genre": str(row.genre),
+                    "narrative_format": str(row.narrative_format),
+                    "style": str(row.style),
                 },
             )
             for row in ranking.itertuples(index=False)

@@ -1,44 +1,78 @@
-# Mercado Verde Viva – Sistema de Recomendação
+# Guia de Séries – Sistema de Recomendação
 
-Este projeto implementa um sistema de recomendação baseado em conteúdo para uma loja de produtos naturais chamada **Mercado Verde Viva**. O catálogo possui 20 produtos, cada um descrito por três características principais (categoria, sabor predominante e benefício). Uma matriz de utilidade com 500 interações usuário-produto acompanha o repositório para referência.
+Um sistema de recomendação baseado em conteúdo voltado para fãs de séries. O catálogo reúne 31 produções com metadados de **gênero**, **formato narrativo** e **estilo**, enquanto uma matriz de 500 avaliações simuladas apoia experimentos futuros.
 
-## Conteúdo
+## Visão geral do projeto
 
-- `content_recommender/data/products.csv`: catálogo com 20 produtos e três características cada.
-- `content_recommender/data/user_ratings.csv`: 500 avaliações simuladas (escala 1-5) entre usuários e produtos.
-- `content_recommender/recommender.py`: implementação do recomendador utilizando TF-IDF para extrair as características mais relevantes.
-- `app.py`: interface em linha de comando para cadastro rápido de preferências e geração de recomendações personalizadas.
+- **Motor de recomendação:** calcula representações TF-IDF das descrições textuais das séries e ranqueia a similaridade cosseno com o perfil informado pelo usuário.
+- **Interface de uso:** `app.py` fornece um fluxo em linha de comando que coleta preferências (gênero, formato narrativo e estilo) e devolve as 5 séries mais alinhadas.
+- **Dados inclusos:** arquivos CSV versionados no repositório permitem executar o projeto imediatamente sem gerar dados adicionais.
+
+## Estrutura
+
+```
+content_recommender/
+├── data/
+│   ├── products.csv        # Catálogo das 31 séries com suas três características
+│   └── user_ratings.csv    # 500 avaliações simuladas em escala 1-5
+├── __init__.py
+└── recommender.py          # Classe ContentRecommender com pré-processamento e ranking
+app.py                      # CLI para coletar preferências e mostrar recomendações
+requirements.txt            # Dependências necessárias (pandas, scikit-learn)
+```
 
 ## Pré-requisitos
 
-- Python 3.10+
-- Dependências listadas em `requirements.txt`.
+- Python 3.10 ou superior.
+- Pip atualizado (`python -m pip install --upgrade pip`).
 
-## Como executar
+## Instalação e execução
 
-1. Crie um ambiente virtual opcionalmente:
+1. **Crie (opcional) e ative um ambiente virtual**
    ```bash
    python -m venv .venv
    source .venv/bin/activate  # Linux/macOS
-   .venv\\Scripts\\activate   # Windows
+   .venv\Scripts\activate   # Windows
    ```
-2. Instale as dependências:
+2. **Instale as dependências**
    ```bash
-   pip install -r requirements.txt
+   python -m pip install -r requirements.txt
    ```
-3. Inicie a aplicação:
+3. **Execute a aplicação**
    ```bash
    python app.py
    ```
-4. Informe seu nome, selecione pelo menos uma preferência entre categoria, sabor e benefício, e receba as recomendações.
+4. Informe seu nome, escolha pelo menos uma preferência para gênero, formato narrativo ou estilo e receba as recomendações personalizadas. Opcionalmente, exporte os resultados em JSON.
 
-Ao final, é possível exportar as sugestões em formato JSON para consulta posterior.
+> 💡 Você pode rodar os mesmos comandos em qualquer terminal (VS Code, PowerShell, Bash, etc.) desde que esteja na raiz do repositório.
 
-## Como funciona o modelo
+## Como o recomendador funciona
 
-1. As características textuais dos produtos são combinadas e vetorizadas com **TF-IDF**.
-2. Um novo usuário informa preferências para as três dimensões do catálogo.
-3. O perfil textual do usuário é convertido para o mesmo espaço vetorial e a similaridade cosseno é usada para ranquear os produtos.
-4. Os cinco itens mais similares são exibidos na interface.
+1. Cada série tem suas três características concatenadas em um texto.
+2. Um vetor TF-IDF é calculado para cada série; o perfil informado pelo usuário gera um vetor no mesmo espaço.
+3. A similaridade cosseno determina o quão próxima cada série está do perfil do usuário.
+4. As 5 séries com maior similaridade são retornadas.
 
-A matriz de utilidade (avaliações) está incluída para consultas futuras e pode ser utilizada para validar outras abordagens de recomendação.
+## Dados fornecidos
+
+- `content_recommender/data/products.csv`: catálogo pronto com 31 séries e três atributos cada.
+- `content_recommender/data/user_ratings.csv`: 500 interações simuladas (escala 1-5) para referência em estudos futuros.
+
+## Solução de problemas comuns
+
+- **`ModuleNotFoundError: No module named 'pandas'`**
+  - Verifique se o ambiente virtual está ativo (prefixo `(.venv)` no terminal).
+  - Reinstale as dependências: `python -m pip install -r requirements.txt`.
+
+- **Erro ao ativar o ambiente virtual no Windows (`Scripts\Activate.ps1` bloqueado)**
+  - Abra o PowerShell como administrador e execute: `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned`.
+
+## Próximos passos sugeridos
+
+- Criar testes automatizados para o fluxo principal de recomendação.
+- Expor o motor como API web (Flask/FastAPI) para integração com front-end.
+- Experimentar modelos híbridos que combinem conteúdo e notas dos usuários.
+
+## Licença
+
+Distribuído sob a licença MIT. Consulte o arquivo `LICENSE` (caso aplicável) ou defina a licença desejada para o projeto.

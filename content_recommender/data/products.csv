@@ -1,21 +1,32 @@
-product_id,name,category,flavor,benefit
-1,Suco Detox Verde,Bebida,cítrico,detox
-2,Granola de Castanhas,Cereal,adocicado,energia
-3,Barra de Proteína Vegana,Snack,cacau,proteína
-4,Chá Calmante de Camomila,Bebida,floral,relaxamento
-5,Pão Integral Multigrãos,Padaria,neutro,saciedade
-6,Iogurte Kefir Natural,Laticínios,ácido,probiótico
-7,Biscoito de Arroz Integral,Snack,neutro,leveza
-8,Leite de Amêndoas,Bebida,suave,intolerância-lactose
-9,Tofu Defumado,Proteína,defumado,proteína
-10,Sopa Orgânica de Abóbora,Prato-pronto,cremoso,conforto
-11,Chips de Batata Doce,Snack,doce,energia
-12,Mix de Frutas Secas,Snack,adocicado,energia
-13,Farinha de Amêndoas,Mercearia,neutro,sem-gluten
-14,Manteiga de Amendoim Integral,Mercearia,amendoim,energia
-15,Suplemento de Spirulina,Suplemento,marinho,imunidade
-16,Água de Coco Orgânica,Bebida,suave,hidratação
-17,Macarrão Integral de Quinoa,Massas,neutro,proteína
-18,Hambúrguer Vegetal,Proteína,temperado,proteína
-19,Chocolate Amargo 70%,Doce,amargo,antioxidante
-20,Molho Pesto Vegano,Condimento,ervas,gourmet
+series_id,name,genre,narrative_format,style
+1,Game of Thrones,Fantasia,Serializado,"epico politica suspense"
+2,The Office (US),Comedia,Mockumentary,"comedia constrangedor acido"
+3,Breaking Bad,Drama,Serializado,"criminal anti heroi inteligente"
+4,Stranger Things,Sci-Fi,Serializado,"terror nostalgia adolescente"
+5,Succession,Drama,Serializado,"politica familia satira"
+6,The Crown,Drama,Serializado,"politica familia biografico"
+7,Mad Men,Drama,Serializado,"anti heroi politica psicologico"
+8,Ruptura,Sci-Fi,Serializado,"thriller misterio tecnologia"
+9,Black Mirror,Sci-Fi,Antologia,"distopia tecnologia sombrio"
+10,Sherlock,Crime,Episodico,"misterio inteligente investigacao"
+11,Arcane,Animação,Serializado,"acao steampunk estilizado"
+12,Rick and Morty,Animação,Episodico,"comedia existencial tecnologia"
+13,Arrested Development,Comedia,Episodico,"comedia familia satira"
+14,Better Call Saul,Drama,Serializado,"spin off inteligente criminal"
+15,The Wire,Drama,Serializado,"policial realista criminal"
+16,Bojack Horseman,Animação,Episodico,"drama existencial satira"
+17,La Casa de Papel,Crime,Serializado,"acao policial criminal"
+18,The Sopranos,Crime,Serializado,"mafia psicologico anti heroi"
+19,Chernobyl,Documentario,Mini-Série,"historico realista mini serie"
+20,Band of Brothers,Drama,Mini-Série,"historico guerra mini serie"
+21,Brooklyn 99,Comedia,Episodico,"comedia criminal policial"
+22,Ozark,Drama,Serializado,"thriller suspense criminal"
+23,True Detective,Crime,Antologia,"thriller mini serie criminal"
+24,Vikings,Ação,Serializado,"historico acao epico"
+25,Fargo,Crime,Antologia,"comedia suspense acido"
+26,Twin Peaks,Drama,Serializado,"suspense criminal surrealismo"
+27,Demolidor,Ação,Serializado,"heroi sombrio acao"
+28,Pacificador,Ação,Serializado,"heroi comedia acao"
+29,Barry,Comedia,Serializado,"drama acido comedia"
+30,How I Met Your Mother,Comedia,Episodico,"comedia amor existencial"
+31,Community,Comedia,Mockumentary,"comedia acido constrangedor"

@@ -1,4 +1,4 @@
-"""Content-based recommendation package for a natural products marketplace."""
+"""Content-based recommendation package for curated TV series."""
 
 from .recommender import ContentRecommender
 
