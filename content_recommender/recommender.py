@@ -58,7 +58,7 @@ class ContentRecommender:
                 + ", ".join(sorted(missing_columns))
             )
             
-        if self._products[self._REQUIRED_COLUMNS].isnull().any().any():
+        if self._products[list(self._REQUIRED_COLUMNS)].isnull().any().any():
             raise ValueError("Products dataset contains empty values in required columns.")
 
         duplicated_ids = self._products["series_id"].duplicated()
