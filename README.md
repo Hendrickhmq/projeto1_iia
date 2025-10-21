@@ -1,73 +1,89 @@
-# Guia de Séries – Sistema de Recomendação
+# Guia de Séries – Sistema de Recomendação Híbrido
 
-Um sistema de recomendação baseado em conteúdo voltado para fãs de séries. O catálogo reúne 31 produções com metadados de **gênero**, **formato narrativo** e **estilo**, enquanto uma matriz de 500 avaliações simuladas apoia experimentos futuros.
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python)
+![Pandas](https://img.shields.io/badge/Pandas-blueviolet?style=for-the-badge&logo=pandas)
+![NumPy](https://img.shields.io/badge/NumPy-gray?style=for-the-badge&logo=numpy)
+![Scikit-learn](https://img.shields.io/badge/SciKit--Learn-orange?style=for-the-badge&logo=scikit-learn)
 
-## Visão geral do projeto
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Hendrickhmq/projeto1_iia/blob/main/projeto1_IIA.ipynb) 
+*(Clique para abrir o projeto funcional no Google Colab)*
 
-- **Motor de recomendação:** calcula representações TF-IDF das descrições textuais das séries e ranqueia a similaridade cosseno com o perfil informado pelo usuário.
-- **Interface de uso:** `app.py` fornece um fluxo em linha de comando que coleta preferências (gênero, formato narrativo e estilo) e devolve as 5 séries mais alinhadas.
-- **Dados inclusos:** arquivos CSV versionados no repositório permitem executar o projeto imediatamente sem gerar dados adicionais.
+---
 
-## Estrutura
+**Autores:**
+-   Arthur Fernandes Vargas (231013171)
+-   Hendrick Henrique Moreno Quevedo (231025510)
 
-```
-content_recommender/
-├── data/
-│   ├── products.csv        # Catálogo das 31 séries com suas três características
-│   └── user_ratings.csv    # 500 avaliações simuladas em escala 1-5
-├── __init__.py
-└── recommender.py          # Classe ContentRecommender com pré-processamento e ranking
-app.py                      # CLI para coletar preferências e mostrar recomendações
-requirements.txt            # Dependências necessárias (pandas, scikit-learn)
-```
+**Disciplina:** Introdução à Inteligência Artificial (CIC0135) - 2025/2  
+**Professor:** Dibio Leandro Borges
 
-## Pré-requisitos
+---
 
-- Python 3.10 ou superior.
-- Pip atualizado (`python -m pip install --upgrade pip`).
+## 🎯 Visão Geral do Projeto
 
-## Instalação e execução
+Sistema de recomendação **híbrido** que combina duas técnicas clássicas de filtragem — **Baseada em Conteúdo (TF-IDF)** e **Colaborativa (User-User)** — para gerar sugestões personalizadas de séries para um novo usuário.
 
-1. **Crie (opcional) e ative um ambiente virtual**
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # Linux/macOS
-   .venv\Scripts\activate   # Windows
-   ```
-2. **Instale as dependências**
-   ```bash
-   python -m pip install -r requirements.txt
-   ```
-3. **Execute a aplicação**
-   ```bash
-   python app.py
-   ```
-4. Informe seu nome, escolha pelo menos uma preferência para gênero, formato narrativo ou estilo e receba as recomendações personalizadas. Opcionalmente, exporte os resultados em JSON.
+A abordagem híbrida foi escolhida para cumprir todos os requisitos do projeto: implementar um modelo de conteúdo (Passo 3) e, ao mesmo tempo, dar uma aplicação prática à matriz de utilidade de 500 avaliações (Passo 2), usando-a para o modelo colaborativo.
 
-> 💡 Você pode rodar os mesmos comandos em qualquer terminal (VS Code, PowerShell, Bash, etc.) desde que esteja na raiz do repositório.
+### Recursos Principais
 
-## Como o recomendador funciona
+- **Modelo de Conteúdo (TF-IDF):** Gera um "perfil de gosto" vetorial para o usuário com base em suas avaliações, usando uma **média ponderada** (notas altas "puxam", notas baixas "empurram" o perfil).
+- **Modelo Colaborativo (User-User):** Utiliza a matriz de utilidade (`user_ratings.csv`) para encontrar "gêmeos de gosto" (vizinhos) e prever notas para itens que o usuário ainda não viu (k-NN).
+- **Modelo Híbrido:** Combina os scores dos dois modelos (após normalização Min-Max) em um `final_score` ponderado, garantindo recomendações robustas.
+- **Solução para "Cold Start":** O modelo de conteúdo atua como *fallback*, garantindo que o sistema possa recomendar itens para um novo usuário (cujas notas não batem com nenhum "vizinho") desde a sua primeira avaliação.
+- **Interface Interativa:** Um notebook do Google Colab (`projeto1_IIA.ipynb`) usa `ipywidgets` para uma interface de usuário limpa, que coleta notas e exibe as recomendações.
 
-1. Cada série tem suas três características concatenadas em um texto.
-2. Um vetor TF-IDF é calculado para cada série; o perfil informado pelo usuário gera um vetor no mesmo espaço.
-3. A similaridade cosseno determina o quão próxima cada série está do perfil do usuário.
-4. As 5 séries com maior similaridade são retornadas.
+## 🏃 Como Executar (Recomendado)
 
-## Dados fornecidos
+A forma mais fácil de executar o projeto é através do Google Colab:
 
-- `content_recommender/data/products.csv`: catálogo pronto com 31 séries e três atributos cada.
-- `content_recommender/data/user_ratings.csv`: 500 interações simuladas (escala 1-5) para referência em estudos futuros.
-## Solução de problemas comuns
+1.  Clique no badge "Open in Colab" no topo deste README.
+2.  No Colab, clique em "Ambiente de execução" -> "Executar tudo".
+3.  Os arquivos CSV serão baixados automaticamente do GitHub (com um *fallback* para upload manual).
+4.  Role até a última célula de "Interface Interativa" para usar o sistema.
 
-- **`ModuleNotFoundError: No module named 'pandas'`**
-  - Verifique se o ambiente virtual está ativo (prefixo `(.venv)` no terminal).
-  - Reinstale as dependências: `python -m pip install -r requirements.txt`.
+---
 
-- **Erro ao ativar o ambiente virtual no Windows (`Scripts\Activate.ps1` bloqueado)**
-  - Abra o PowerShell como administrador e execute: `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned`.
+### Execução Local (Alternativa)
 
-## Próximos passos sugeridos
+1.  **Clone o repositório:**
+    ```bash
+    git clone [https://github.com/Hendrickhmq/projeto1_iia.git](https://github.com/Hendrickhmq/projeto1_iia.git)
+    cd projeto1_iia
+    ```
+2.  **Crie e ative um ambiente virtual:**
+    ```bash
+    python -m venv .venv
+    # Linux/macOS
+    source .venv/bin/activate
+    # Windows
+    .\.venv\Scripts\activate
+    ```
+3.  **Instale as dependências:**
+    ```bash
+    python -m pip install -r requirements.txt
+    ```
+4.  **Execute o notebook Jupyter:**
+    ```bash
+    jupyter notebook projeto1_IIA.ipynb
+    ```
 
-- Criar testes automatizados para o fluxo principal de recomendação.
-- Expor o motor como API web (Flask/FastAPI) para integração com front-end.
-- Experimentar modelos híbridos que combinem conteúdo e notas dos usuár
+## ⚙️ Como o Recomendador Híbrido Funciona
+
+O sistema opera em três estágios para gerar uma recomendação para um novo usuário:
+
+1.  **Estágio 1: Modelo de Conteúdo (TF-IDF)**
+    - O catálogo de séries (`products.csv`) é vetorizado usando `TfidfVectorizer` (do `sklearn`), criando uma matriz de features.
+    - As notas (1-5) que o novo usuário fornece são usadas para criar um **vetor de perfil** (`np.ndarray`).
+    - O `content_score` é a **Similaridade de Cosseno** (`sklearn.metrics.cosine_similarity`) entre o vetor de perfil do usuário e os vetores de todas as outras séries.
+
+2.  **Estágio 2: Modelo Colaborativo (User-User)**
+    - A matriz de utilidade (`user_ratings.csv`) é pivotada para `usuários` x `itens`.
+    - A similaridade de cosseno (`sklearn.metrics.pairwise_distances`) é calculada entre o *vetor de notas* do novo usuário e os vetores de todos os 500 usuários antigos.
+    - O sistema encontra os "Top-K" vizinhos (`k_neighbors_collab`) mais parecidos.
+    - O `collab_score` é uma **nota prevista** para cada série, calculada pela média ponderada das notas dadas pelos vizinhos.
+
+3.  **Estágio 3: O Modelo Híbrido**
+    - Os `content_score` e `collab_score` são normalizados (escala de 0 a 1).
+    - Um `final_score` é calculado como uma média ponderada dos dois scores (ex: 60% Conteúdo, 40% Colaborativo).
+    - As Top-N séries com o maior `final_score` são retornadas ao usuário.
